@@ -56,7 +56,7 @@ class SearchSecondary extends Component {
 
     let customWidth, customOverflow;
     if(!compiledQuery.length){
-      customWidth = "0"
+      customWidth = "1px"
     } 
     if(compiledQuery || compiledFilter.trim()){
       customOverflow = "hidden"
@@ -100,7 +100,9 @@ class SearchSecondary extends Component {
                 
             </div>
 
-            <div onClick={(e)=>this.onSubmit(e)} className="save-search">Save</div>
+            <div onClick={(e)=>this.onSubmit(e)} className="save-search-wrapper">
+              <p className="save-search">Save</p>
+            </div>
           </div>
 
         </form>
@@ -131,6 +133,7 @@ class SearchSecondary extends Component {
             flex-flow: row nowrap;
             align-items: center;
             justify-content: space-between;
+            overflow: hidden;
             height: 64px;
             max-width: 600px;
             background: white;
@@ -162,19 +165,22 @@ class SearchSecondary extends Component {
             font-size: 1em;
             color: black;
           }
-          .save-search {
+          .save-search-wrapper {
             position: relative;
             display: flex;
             color: rgb(64 102 149);
-            margin-right: 24px;
-            padding-bottom: 4px;
+            background: white;
+            padding-right: 24px;
             min-width: 32px;
-            border-bottom: 1px solid rgb(64 102 149);
             font: 600 0.875em system-ui;
             -webkit-box-shadow: -16px 0px 15px -3px rgba(255,255,255,1);
             -moz-box-shadow: -16px 0px 15px -3px rgba(255,255,255,1);
             box-shadow: -16px 0px 15px -3px rgba(255,255,255,1);
-              cursor: pointer;
+            cursor: pointer;
+          }
+          .save-search {
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgb(64 102 149);
           }
           @media all and (min-width: 376px) {
 

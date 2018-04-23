@@ -44,6 +44,11 @@ const searchReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         savedSearchToggle: action.boolean
       });
+    // Toggle Favorite currently being used in Sample Data Reducer;
+    // case types.TOGGLE_FAVORITE:
+    //   return Object.assign({}, state, {
+    //     xx
+    //   });
     case types.TOGGLE_SHOW_FAVORITES:
       return Object.assign({}, state, {
         favoritedSearchToggle: action.boolean

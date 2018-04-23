@@ -40,6 +40,11 @@ export const toggleSavedSearch = (boolean) => ({
   boolean
 });
 
+export const toggleFavorite = (boolean) => ({
+  type: types.TOGGLE_FAVORITE,
+  boolean
+});
+
 export const toggleShowFavorites = (boolean) => ({
   type: types.TOGGLE_SHOW_FAVORITES,
   boolean

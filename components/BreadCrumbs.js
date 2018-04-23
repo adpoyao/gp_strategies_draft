@@ -63,7 +63,7 @@ class BreadCrumbs extends Component {
           }
           @media all and (min-width: 376px) {
             .container {
-              margin-top: 59px;
+              margin-top: 32px;
             }
           }
         `}

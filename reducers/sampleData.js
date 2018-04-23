@@ -1,3 +1,5 @@
+import * as types from '../actions/actionType';
+
 const initialState = {
   //Vehicles: from PRODUCT schema
   products: [ //Field: nodes
@@ -92,7 +94,23 @@ const initialState = {
       "subtitle": "",
       "contentType": "Document",
       "url": "http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/Adobe-PDF-Document-icon.png",
-      "updatedAt": "July 28, 2017"
+      "updatedAt": "July 28, 2017",
+      // Temporary use of Favorite
+      "isFavorited": true,
+      "topics": [
+        { 
+          id: "Lorem Ipsum",
+          content: "Lorem Ipsum"
+        },
+        {
+          id: "Dolor",
+          content: "Dolor"
+        },
+        {
+          id: "Sit Ame",
+          content: "Sit Ame"
+        }
+      ]
     },
     {
       "id": "2",
@@ -100,7 +118,15 @@ const initialState = {
       "subtitle": "",
       "contentType": "Document",
       "url": "http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/Adobe-PDF-Document-icon.png",
-      "updatedAt": "July 28, 2017"
+      "updatedAt": "July 28, 2017",
+      // Temporary use of Favorite
+      "isFavorited": false,
+      "topics": [
+        {
+          id: "Dolor",
+          content: "Dolor"
+        }
+      ]
     }
   ],
   savedAndFavs: [

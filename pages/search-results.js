@@ -8,9 +8,10 @@ import Filter from '../components/Filter';
 import Banner from '../components/Banner';
 import ListBox from '../components/ListBox';
 import Checkbox from '../components/Checkbox';
+import TagSmall from '../components/TagSmall';
 import PageSection from '../components/PageSection';
 import BreadCrumbs from '../components/BreadCrumbs';
-import ResultItemSmall from '../components/ResultItemSmall';
+import ResultItemLarge from '../components/ResultItemLarge';
 import SearchSecondary from '../components/SearchSecondary';
 import ProductThumbnail from '../components/ProductThumbnail';
 
@@ -18,8 +19,14 @@ import ProductThumbnail from '../components/ProductThumbnail';
 import Pagination from '../components/Pagination';
 
 import * as action from '../actions/search';
-
 class SearchResults extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      filterToggle: false
+    };
+  };
 
   componentWillUnmount() {
     this.props.dispatch(action.clearFilters());
@@ -62,6 +69,11 @@ class SearchResults extends Component {
   handleResultClick = (result) => {
     console.log(`Result: ${result} clicked.`)
   };
+
+  handleToggleFilter = () => {
+    this.setState({filterToggle: !this.state.filterToggle});
+    console.log(this.state.filterToggle);
+  }
 
   render() {  
 
@@ -179,9 +191,38 @@ class SearchResults extends Component {
 
     if(contents){
       resultItems = contents.map(content => {
+
+        // XX: Topic tags get generated here. Hardcoded with sample data, need to connect to GraphQL query;
+        let topicTags = content.topics.map(topic => {
+          return ( 
+            <div key={topic.id} className="tag-wrapper">
+              <TagSmall key={topic.id} {...topic} />
+
+              <style jsx>{`
+                .tag-wrapper {
+                  width: max-content;
+                  padding: 2.5px;
+                }
+              `}
+              </style>
+            </div>
+          );
+        });
+
         return (
           <div key={content.id} className="content-wrapper">
-            <ResultItemSmall key={content.id} handleClick={this.handleResultClick} {...content} />
+            <ResultItemLarge key={content.id} handleClick={this.handleResultClick} {...content} >
+              <div className="tags-wrapper">
+                {topicTags}
+              </div>
+            </ResultItemLarge>
+            
+            <div className="tags-wrapper tags-desktop-view">
+              {topicTags}
+              {/* Temporary use of three dots icon */}
+              <img src="http://chittagongit.com/images/three-vertical-dots-icon/three-vertical-dots-icon-20.jpg"/>
+            </div>
+
             <style jsx>{`
               .content-wrapper {
                 border: 1px solid lightgrey;
@@ -189,6 +230,9 @@ class SearchResults extends Component {
                 margin-bottom: 16px;
                 padding: 0 16px;
                 transition: all 0.3s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
               }
               .content-wrapper:hover {
                 cursor: pointer;
@@ -196,6 +240,31 @@ class SearchResults extends Component {
                 -webkit-box-shadow: 0px 10px 10px -6px rgba(0,0,0,0.15);
                 -moz-box-shadow: 0px 10px 10px -6px rgba(0,0,0,0.15);
                 box-shadow: 0px 10px 10px -6px rgba(0,0,0,0.15);
+              }
+              .tags-wrapper {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: flex-start;
+                align-items: center;
+              }
+              .tags-desktop-view {
+                display: none;
+              }
+              // XX: Temporary configuration for placehold icon (dot dot dot);
+              img {
+                width: 50px;
+                height: 50px
+              }
+              @media all and (min-width: 376px) {
+                .tags-desktop-view {
+                  display: flex;
+                }
+                .tags-wrapper {
+                  display: flex;
+                  flex-flow: row nowrap;
+                  justify-content: flex-end;
+                  align-items: center;
+                }
               }
             `}
             </style>
@@ -259,13 +328,21 @@ class SearchResults extends Component {
 
           <div className="banner-content-wrapper">
             <SearchSecondary/>
+
+            <div className="mobile-view"><Checkbox id={favoritesMobile.label} {...favoritesMobile}/></div>
             <div className="filter-wrapper">
               <div className="desktop-view"><Checkbox id={favoritesDesktop.label} {...favoritesDesktop}/></div>
-              <div className="mobile-view"><Checkbox id={favoritesMobile.label} {...favoritesMobile}/></div>
               {filters}
             </div> 
           </div>
         </Banner>
+
+        <div onClick={()=>this.handleToggleFilter()} className="expand-filter">
+          <span className="filter-label">Filters</span>
+          <span className="filter-icon-wrapper">
+            <img className="filter-icon" src="https://cdn4.iconfinder.com/data/icons/media-player-icons/80/Media_player_icons-04-512.png" />
+          </span>
+        </div>
         
         <PageSection>
           <div className="search-result-wrapper">
@@ -303,7 +380,6 @@ class SearchResults extends Component {
           }
           .page-section-header {
             font-size: 1.5em;
-            // padding-bottom: 8px;//
             padding-bottom: 32px;
             border-bottom: 2px dashed rgb(231, 231, 231);
           }
@@ -333,12 +409,43 @@ class SearchResults extends Component {
           .list-box {
             margin: 0 0 32px 0;
           }
+          .expand-filter {
+            display: ${this.state.filterToggle ? "none" : "flex"};
+            align-items: center;
+            background: rgb(44 91 142);
+            height: 50px;
+            font: 700 1em system-ui;
+            color: white;
+            cursor: pointer;
+          }
+          .filter-label {
+            margin-left: 32px;
+            flex: 1 70%;
+          }
+          .filter-icon-wrapper {
+            flex: 1 30%;
+            display: flex;
+            align-items: center;
+            border-left: grey 1px solid;
+            height: 100%;
+          }
+          .filter-icon {
+            height: auto;
+            max-width: 30px;
+            margin: 0 auto;
+          }
+          .filter-wrapper {
+            display: ${this.state.filterToggle ? "block" : "none"};
+          }
 
           @media all and (min-width: 376px) {
             .desktop-view {
               display: flex;
             }
             .mobile-view {
+              display: none;
+            }
+            .expand-filter {
               display: none;
             }
             .filter-wrapper {

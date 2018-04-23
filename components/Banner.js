@@ -14,11 +14,12 @@ class Banner extends Component {
         <style jsx>{`
           .container {
             background: linear-gradient(297.24deg, #EBEDEE 0%, #FBFBFB 100%);
-            padding: 5%;
+            padding: 5% 5% 32px 5%;
           }
           @media all and (min-width: 376px) {
             .container {
               height: 200px;
+              padding: 0 5%
             }
             .children-wrapper {
               display: flex;

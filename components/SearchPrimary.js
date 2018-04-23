@@ -67,7 +67,7 @@ class SearchPrimary extends Component {
         <form 
           onSubmit={(e)=>this.onSubmit(e)} htmlFor="search"
           >
-          <div className="input-wrapper">
+          <div className="input-wrapper" onClick={()=>this.searchInput.focus()}>
             <div className="input-inner-wrapper">
               {/* XX: Temporary use of Search Icon ~*/}
               <img src="https://www.picpng.com/images/small/magnifying-glass-search-loupe-image-download-49863" 
@@ -84,6 +84,8 @@ class SearchPrimary extends Component {
                 <input 
                   type="text"
                   id="search"
+                  autoComplete="off"
+                  ref={(input) => {this.searchInput = input}}
                   placeholder="Search by vehicle, topic, keyword or content title..."
                   onChange={(event)=>this.onHandleInputChange(event)}
                   value={this.props.searchTerm}

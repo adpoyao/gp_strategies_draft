@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Icon from '../components/Icon';
+
 class ResultItemSmall extends Component {
   render() {
     let { id, title, contentType, updatedAt } = this.props;
@@ -9,8 +11,21 @@ class ResultItemSmall extends Component {
         
         {/* XX: Temporary use of PDF & star icons ~*/}
         <div className="file-icon-wrapper">
-          <img className="favorite-star-sm star-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/2000px-Gold_Star.svg.png" />
-          <img className="file-icon" src={this.props.url} />
+          <div className="favorite-star-sm">
+            <Icon 
+              // Boolean will be based on if the data isFavorited
+              clicked={true}
+              maxWidth="32px"
+              clickedIconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/2000px-Gold_Star.svg.png"
+              notClickedIconUrl = "http://www.gamingevolution.info/screenshots/main.php/d/149898-1/Greystar.gif"
+            />
+          </div>
+          <div className="file-icon">
+            <Icon 
+              maxWidth="48px"
+              defaultIcon = {this.props.url}
+            />
+          </div>
         </div>
         
         <div className="text-wrapper">
@@ -23,7 +38,15 @@ class ResultItemSmall extends Component {
         </div>
         
         {/* XX: Temporary use of star icon ~*/}
-        <img className="favorite-star-lg star-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/2000px-Gold_Star.svg.png" />
+        <div className="favorite-star-lg">
+          <Icon 
+            // Boolean will be based on if the data isFavorited
+            clicked={true}
+            maxWidth="32px"
+            clickedIconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Gold_Star.svg/2000px-Gold_Star.svg.png"
+            notClickedIconUrl = "http://www.gamingevolution.info/screenshots/main.php/d/149898-1/Greystar.gif"
+          />
+        </div>
 
         <style jsx>{`
           .container {
@@ -44,10 +67,6 @@ class ResultItemSmall extends Component {
           }
           .inner-text-wrapper {
             display: none
-          }
-          .star-icon {
-            max-width: 32px;
-            max-height: 32px;
           }
           .favorite-star-sm {
             display: none;

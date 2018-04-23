@@ -32,6 +32,8 @@ class TagSmall extends Component {
       default:
         // Customized tagline
         tagline = this.props.content;
+        backgroundColor = "rgb(231 231 231)";
+        fontColor = "rgb(64 102 149)";
         break;
     };
 
@@ -44,17 +46,17 @@ class TagSmall extends Component {
             background: ${backgroundColor};
             color: ${fontColor};
             font: 100 0.813em system-ui;
-            padding: 0 8px;
-            height: 30px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 0 8px;
+            height: 30px;
+            width: max-content;
             border-radius: 4px;
             border: ${border};
-            margin: 0 16px 0 0;
           }
           @media all and (min-width: 376px) {
-            .container {
-              // margin: 0 16px;
+
             }
           }
         `}
