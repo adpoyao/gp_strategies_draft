@@ -3,39 +3,39 @@ import { connect } from 'react-redux';
 import Link from 'next/link';
 import Router from 'next/router';
 import { debounce } from 'lodash';
+import autosizeInput from 'autosize-input';
 
 import { updateSearchTerm } from '../actions/search';
 
 class SearchSecondary extends Component {
-  constructor(props) {
-    super(props)
-
+  componentDidMount() {
+    autosizeInput(document.querySelector('#search-input'))
   }
 
-  componentWillMount() {
-    this.setState({input: this.props.searchTerm});
-  }
-
+  // XX: On keydown/save click, the following information prints.
   onSubmit(e) {
+    let { 
+      searchTerm,
+      filteredContentType,
+      filteredTopic,
+      filteredStatus } = this.props;
+
     e.preventDefault();
+    console.log(`Logged Input:, 
+      searchTerm: ${searchTerm},
+      filteredContentType: ${filteredContentType},
+      filteredTopic: ${filteredTopic},
+      filteredStatus: ${filteredStatus}`
+    );
   }
 
   onHandleInputChange(event){
-    // this.setState({input: event.target.value})
-    // this.props.dispatch(updateSearchTerm(event.target.value));
-  };
-
-  toString(query){
-    if(query){
-      return `"${query}"`
-    } else {
-      return '';
-    }
+    this.props.dispatch(updateSearchTerm(event.target.value));
   };
 
   toIsFilter(array){
     if(array && array.length > 0){
-      return `is: (${array.toString().split(",").join(", ")})`
+      return `is: ("${array.toString().split(",").join(", ")}")`
     } else {
       return '';
     };
@@ -43,36 +43,64 @@ class SearchSecondary extends Component {
 
   toInFilter(array){
     if(array && array.length > 0){
-      return `in: (${array.toString().split(",").join(", ")})`
+      return `in: ("${array.toString().split(",").join(", ")}")`
     } else {
       return '';
     };
   };
 
   render() {
+    let compiledQuery = this.props.searchTerm;
+    let compiledFilter = this.toIsFilter(this.props.filteredStatus) + " " + this.toIsFilter(this.props.filteredContentType) + " " + this.toInFilter(this.props.filteredTopic);
+    compiledFilter = compiledFilter.split("  ").join(" ");
 
-    let compiledQuery = this.toString(this.props.searchTerm) + " " + this.toIsFilter(this.props.filteredStatus) + " " + this.toIsFilter(this.props.filteredContentType) + " " + this.toInFilter(this.props.filteredTopic);
-    compiledQuery = compiledQuery.split("  ").join(" ");
+    let customWidth, customOverflow;
+    if(!compiledQuery.length){
+      customWidth = "0"
+    } 
+    if(compiledQuery || compiledFilter.trim()){
+      customOverflow = "hidden"
+    }
+
+    let placeholder, apostrophe;
+    if(!compiledFilter.trim()){
+      placeholder = "Search by vehicle, topic, keyword or content title...";
+    } 
+    if(this.props.searchTerm){
+      apostrophe ="\"";
+    };
 
     return(
       <div className="container">
         <form onSubmit={(e)=>this.onSubmit(e)}>
-          <div className="input-wrapper">
+          <div onClick={()=>this.searchInput.focus()} className="input-wrapper">
             
             <div className="input-inner-wrapper">
               {/* Temporary use of Search Icon */}
               <img src="https://www.picpng.com/images/small/magnifying-glass-search-loupe-image-download-49863" 
                 className="search-icon magnifying-glass"/>
-              <input 
-                text="text"
-                placeholder="Search by vehicle, topic, keyword or content title..."
-                onChange={(event)=>this.onHandleInputChange(event)}
+              
+              {apostrophe}
+              {/* First Input is the standard text that users could read and type in */}
+              <div className="search-input-wrapper">
+                <input 
+                  text="text"
+                  id="search-input"
+                  className="search-input"
+                  autoComplete="off"
+                  ref={(input) => {this.searchInput = input}}
+                  placeholder= {placeholder}
+                  onChange={(event)=>this.onHandleInputChange(event)}
+                  value={compiledQuery}
+                />
+              </div>
+              {apostrophe}&nbsp;
 
-                value={compiledQuery}
-              />
+              <span className="filter-input">{compiledFilter}</span>
+                
             </div>
 
-            <p onClick={(e)=>this.onSubmit(e)} className="save-search">Save</p>
+            <div onClick={(e)=>this.onSubmit(e)} className="save-search">Save</div>
           </div>
 
         </form>
@@ -113,15 +141,21 @@ class SearchSecondary extends Component {
           }
           .input-inner-wrapper {
             display: flex;
-            flex: 1;
             align-items: center;
+            overflow: ${customOverflow};
           }
           .search-icon {
             display: flex;
             margin: 0 12px;
           }
+          .search-input-wrapper {
+            width: ${customWidth}
+          }
+          .filter-input {
+            font: 400 1em system-ui;
+            white-space: nowrap;
+          }
           input {
-            flex: 1;
             padding: 0;
             border: none;
             outline: none;
@@ -142,7 +176,6 @@ class SearchSecondary extends Component {
             box-shadow: -16px 0px 15px -3px rgba(255,255,255,1);
               cursor: pointer;
           }
-
           @media all and (min-width: 376px) {
 
             }
@@ -158,7 +191,6 @@ const mapStateToProps = state => {
   let { searchTerm, filteredStatus, filteredContentType, filteredTopic } = state.search;
   return ({
   searchTerm,
-  filteredStatus,
   filteredContentType,
   filteredTopic,
   filteredStatus,

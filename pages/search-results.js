@@ -312,7 +312,7 @@ class SearchResults extends Component {
           }
           .banner-content-wrapper{
             display: flex;
-            flex-flow: row nowrap;
+            flex-flow: column nowrap;
           }
           .search-result-wrapper {
             display: flex;
@@ -358,6 +358,9 @@ class SearchResults extends Component {
               -webkit-box-shadow: 0px 10px 6px -6px rgba(0,0,0,0.15);
               -moz-box-shadow: 0px 10px 6px -6px rgba(0,0,0,0.15);
               box-shadow: 0px 10px 6px -6px rgba(0,0,0,0.15);
+            }
+            .banner-content-wrapper{
+              flex-flow: row nowrap;
             }
             .contents-wrapper {
               display: flex;
